@@ -1,0 +1,30 @@
+site_name: Modern C++ Crash Practice Guide
+
+nav:
+    - Home: index.md
+    - Content:
+        - Building Tools: building_tools.md
+        - Overload function: overload_function.md
+        - Default parameters: default_parameter.md
+        - Extern "C": extern_c.md
+        - inline: inline.md
+        - reference: reference.md
+        - Appendixes: appendixes.md
+    # - About: about.md
+
+theme:
+  name: 'mkdocs'
+
+extra_css:
+    - css/extra.css
+
+extra:
+  version: 1.0
+
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition
+    - def_list
+
+copyright: Copyright &copy; 2018 <a href="mailto:anjingyu_ws@foxmail.com">Matt An</a>, Maintained by the <a href="mailto:anjingyu_ws@foxmail.com">Matt An</a>.

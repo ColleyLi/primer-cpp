@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Default parameters - Modern C++ Crash Practice Guide</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../css/extra.css" rel="stylesheet">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Modern C++ Crash Practice Guide</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Content <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../building_tools/" class="dropdown-item">Building Tools</a>
+</li>
+                                    
+<li>
+    <a href="../overload_function/" class="dropdown-item">Overload function</a>
+</li>
+                                    
+<li>
+    <a href="../default_parameter.md" class="dropdown-item">Default parameters</a>
+</li>
+                                    
+<li>
+    <a href="../extern_c.md" class="dropdown-item">Extern "C"</a>
+</li>
+                                    
+<li>
+    <a href="../inline/" class="dropdown-item">inline</a>
+</li>
+                                    
+<li>
+    <a href="../reference/" class="dropdown-item">reference</a>
+</li>
+                                    
+<li>
+    <a href="../appendixes/" class="dropdown-item">Appendixes</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#c" class="nav-link">C++默认参数</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">分析</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#include" class="nav-link">include </a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!--
+ * @Description:
+ * @version:
+ * @Author: colley
+ * @Date: 2020-03-14 14:05:23
+ * @LastEditors: colley
+ * @LastEditTime: 2020-03-15 18:05:18
+ -->
+
+<h2 id="c">C++默认参数<a class="headerlink" href="#c" title="Permanent link"></a></h2>
+<ul>
+<li>C++ 允许函数设置默认参数，在调用时可以根据情况省略参数。规则如下：</li>
+<li>默认参数只能按照从最右到左的顺序，并且是连续的，不能出现默认参数和非默认参数进行交叉的格式。</li>
+<li><font color=STCAIYUN>如果函数同时有声明和实现，参数只能放在函数声明中，否则会报错：重复定义。</font></li>
+<li>默认参数可以是常量、全局符号（全局变量、函数名）。</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+</div>
+<ul>
+<li>C语言不存在默认参数</li>
+<li>
+<p>函数重载、默认参数可能会产生冲突、二义性（建议使用默认参数）
+    ```c++
+    #include <iostream></p>
+<p>void test(int a, int b = 9)
+{
+    std::cout &lt;&lt; "void test(int a, int b = 9)" &lt;&lt; std::endl;
+}</p>
+<p>void test(int a)
+{
+    std::cout &lt;&lt; "void test(int a)" &lt;&lt; std::endl;
+}</p>
+<p>int main()
+{
+    test(a); //产生了二义性
+    retrun 0;
+}
+```</p>
+</li>
+</ul>
+<h3 id="democ">Demo以及C++默认参数本质(汇编)<a class="headerlink" href="#democ" title="Permanent link"></a></h3>
+<pre><code class="c++">#include &lt;iostream&gt;
+
+int sum(int value1 =3, int value2 =5)
+{
+    return value1 + value2;
+}
+
+int gValue = 9;
+
+int sum2(int value1 = gValue, int value2 = 0)
+{
+    return value1 + value2;
+}
+
+
+
+void test(int a) {
+    std::cout &lt;&lt; &quot;test(int) - &quot; &lt;&lt; a &lt;&lt; std::endl;
+}
+
+//函数指针初始化
+void func(int v1, void(*p)(int) = test) {
+    p(v1);
+}
+
+void test(int a = 0, int b = 9);
+
+int main(int argc, char **argv)
+{
+    sum();
+    sum(6);
+    func(7);
+    test();
+    return 0;
+}
+
+void test(int a, int b)
+{
+    std::cout &lt;&lt; &quot;a+b: &quot; &lt;&lt; a + b &lt;&lt; std::endl;
+}
+</code></pre>
+
+<h2 id="_1">分析<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
+<ul>
+<li><code>sum()</code>和<code>sum(6)</code>在汇编中的结果对比,实现没有不同，从汇编上看他们的本质完全一样。
+    <code>C++
+        30:     sum();
+    01182798 6A 05                push        5
+    0118279A 6A 03                push        3
+    0118279C E8 FF E8 FF FF       call        sum (011810A0h)
+    011827A1 83 C4 08             add         esp,8
+        31:     sum(6);
+    011827A4 6A 05                push        5
+        31:     sum(6);
+    011827A6 6A 06                push        6
+    011827A8 E8 F3 E8 FF FF       call        sum (011810A0h)
+    011827AD 83 C4 08             add         esp,8</code></li>
+<li>函数指针和指针函数的区分</li>
+<li>
+<p>指针函数，简单的来说，就是一个返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。声明格式为：* 类型标识符 函数名(参数表)
+    ```c++
+    #include<iostream></p>
+<p>typedef struct _Data{
+    int a;
+    int b;
+}Data;</p>
+<p>//指针函数
+Data* f(int a,int b){
+    Data * data = new Data;
+    data-&gt;a = a;
+    data-&gt;b = b;
+    return data;
+}</p>
+<p>int main(int argc, char *argv[])
+{
+    //调用指针函数
+    Data * myData = f(4,5);
+    std::cout &lt;&lt; "f(4,5) = " &lt;&lt; myData-&gt;a &lt;&lt; myData-&gt;b &lt;&lt; std::endl;
+    delete myData;
+    return 0;
+}
+```</p>
+</li>
+<li>
+<p>函数指针，其本质是一个指针变量，该指针指向这个函数。总结来说，函数指针就是指向函数的指针。声明格式：类型说明符 (*函数名) (参数)</p>
+<p>```c++</p>
+<h1 id="include">include <iostream><a class="headerlink" href="#include" title="Permanent link"></a></h1>
+<p>int add(int x,int y){
+return x+y;
+}
+int sub(int x,int y){
+    return x-y;
+}
+//函数指针
+int (*fun)(int x,int y);</p>
+<p>int main(int argc, char <em>argv[])
+{
+    //第一种写法
+    fun = add;
+    std::cout &lt;&lt; "(</em>fun)(1,2) = " &lt;&lt; (<em>fun)(1,2) ;
+    //第二种写法
+    fun = &sub;
+    std::cout &lt;&lt; "(</em>fun)(5,3) = " &lt;&lt; (*fun)(5,3)  &lt;&lt; fun(5,3)；
+    return 0;
+}
+```</p>
+</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2018 <a href="mailto:anjingyu_ws@foxmail.com">Matt An</a>, Maintained by the <a href="mailto:anjingyu_ws@foxmail.com">Matt An</a>.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
