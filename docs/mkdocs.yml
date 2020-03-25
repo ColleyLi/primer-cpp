@@ -1,4 +1,4 @@
-site_name: Modern C++ Crash Practice Guide
+site_name: C++
 
 nav:
     - Home: index.md
@@ -27,4 +27,4 @@ markdown_extensions:
     - admonition
     - def_list
 
-copyright: Copyright &copy; 2018 <a href="mailto:anjingyu_ws@foxmail.com">Matt An</a>, Maintained by the <a href="mailto:anjingyu_ws@foxmail.com">Matt An</a>.
+copyright: Copyright &copy; 2018 <a href="mailto:ctyly1991@163.com">Colley Li</a>, Maintained by the <a href="mailto:ctyly1991@163.com">Colley Li</a>.

@@ -111,10 +111,30 @@
  * @Author: colley
  * @Date: 2020-03-15 16:17:11
  * @LastEditors: colley
- * @LastEditTime: 2020-03-15 16:20:04
+ * @LastEditTime: 2020-03-15 19:32:10
  -->
 
-<h2 id="_1">汇编<a class="headerlink" href="#_1" title="Permanent link"></a></h2></div>
+<h2 id="_1">汇编<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
+<p><code>__asm</code>可以C++和ASM混编</p>
+<p><code>[]</code>中放的是地址值</p>
+<p>变量的地址值是一直变化的例如：[ebp-04h]，全局变量的地址是固定的例如：[11223344h]</p>
+<p>CPU存放大小端模式（大部分是小端模式）：例如4字节存放数字3例如小端模式</p>
+<p>二进制
+|内存地址  | 内容    |
+|------   |-----    |
+|1128h    | 00000011|
+|1129h    | 00000000|
+|112Ah    | 00000000|
+|112Bh    | 00000000|</p>
+<p>十六进制
+|内存地址  | 内容    |
+|------   |-----    |
+|1128h    | 03h|
+|1129h    | 00h|
+|112Ah    | 00h|
+|112Bh    | 00h|</p>
+<p><code>lea</code>: load effective address</p>
+<p><code>ret</code>: return</p></div>
             </div>
         </div>
 

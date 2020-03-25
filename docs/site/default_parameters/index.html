@@ -105,11 +105,6 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="1"><a href="#include" class="nav-link">include </a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
         </ul>
     </div>
 </div></div>
@@ -121,41 +116,45 @@
  * @Author: colley
  * @Date: 2020-03-14 14:05:23
  * @LastEditors: colley
- * @LastEditTime: 2020-03-15 18:05:18
+ * @LastEditTime: 2020-03-15 18:29:42
  -->
 
 <h2 id="c">C++默认参数<a class="headerlink" href="#c" title="Permanent link"></a></h2>
 <ul>
-<li>C++ 允许函数设置默认参数，在调用时可以根据情况省略参数。规则如下：</li>
+<li>C++ 允许函数设置默认参数，在调用时可以根据情况省略参数。规则如下：<ul>
 <li>默认参数只能按照从最右到左的顺序，并且是连续的，不能出现默认参数和非默认参数进行交叉的格式。</li>
 <li><font color=STCAIYUN>如果函数同时有声明和实现，参数只能放在函数声明中，否则会报错：重复定义。</font></li>
 <li>默认参数可以是常量、全局符号（全局变量、函数名）。</li>
+</ul>
+</li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 </div>
 <ul>
 <li>C语言不存在默认参数</li>
-<li>
-<p>函数重载、默认参数可能会产生冲突、二义性（建议使用默认参数）
-    ```c++
-    #include <iostream></p>
-<p>void test(int a, int b = 9)
+<li>函数重载、默认参数可能会产生冲突、二义性（建议使用默认参数）</li>
+</ul>
+<pre><code class="c++">#include &lt;iostream&gt;
+
+void test(int a, int b = 9)
 {
-    std::cout &lt;&lt; "void test(int a, int b = 9)" &lt;&lt; std::endl;
-}</p>
-<p>void test(int a)
+    std::cout &lt;&lt; &quot;void test(int a, int b = 9)&quot; &lt;&lt; std::endl;
+}
+
+
+void test(int a)
 {
-    std::cout &lt;&lt; "void test(int a)" &lt;&lt; std::endl;
-}</p>
-<p>int main()
+    std::cout &lt;&lt; &quot;void test(int a)&quot; &lt;&lt; std::endl;
+}
+
+int main()
 {
     test(a); //产生了二义性
     retrun 0;
 }
-```</p>
-</li>
-</ul>
+</code></pre>
+
 <h3 id="democ">Demo以及C++默认参数本质(汇编)<a class="headerlink" href="#democ" title="Permanent link"></a></h3>
 <pre><code class="c++">#include &lt;iostream&gt;
 
@@ -170,8 +169,6 @@ int sum2(int value1 = gValue, int value2 = 0)
 {
     return value1 + value2;
 }
-
-
 
 void test(int a) {
     std::cout &lt;&lt; &quot;test(int) - &quot; &lt;&lt; a &lt;&lt; std::endl;
@@ -201,70 +198,75 @@ void test(int a, int b)
 
 <h2 id="_1">分析<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
 <ul>
-<li><code>sum()</code>和<code>sum(6)</code>在汇编中的结果对比,实现没有不同，从汇编上看他们的本质完全一样。
-    <code>C++
-        30:     sum();
-    01182798 6A 05                push        5
-    0118279A 6A 03                push        3
-    0118279C E8 FF E8 FF FF       call        sum (011810A0h)
-    011827A1 83 C4 08             add         esp,8
-        31:     sum(6);
-    011827A4 6A 05                push        5
-        31:     sum(6);
-    011827A6 6A 06                push        6
-    011827A8 E8 F3 E8 FF FF       call        sum (011810A0h)
-    011827AD 83 C4 08             add         esp,8</code></li>
-<li>函数指针和指针函数的区分</li>
-<li>
-<p>指针函数，简单的来说，就是一个返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。声明格式为：* 类型标识符 函数名(参数表)
-    ```c++
-    #include<iostream></p>
-<p>typedef struct _Data{
+<li><code>sum()</code>和<code>sum(6)</code>在汇编中的结果对比,实现没有不同，从汇编上看他们的本质完全一样。</li>
+</ul>
+<pre><code class="C++">    30:     sum();
+01182798 6A 05                push        5
+0118279A 6A 03                push        3
+0118279C E8 FF E8 FF FF       call        sum (011810A0h)
+011827A1 83 C4 08             add         esp,8
+    31:     sum(6);
+011827A4 6A 05                push        5
+    31:     sum(6);
+011827A6 6A 06                push        6
+011827A8 E8 F3 E8 FF FF       call        sum (011810A0h)
+011827AD 83 C4 08             add         esp,8
+</code></pre>
+
+<ul>
+<li>函数指针和指针函数的区分<ul>
+<li>指针函数，简单的来说，就是一个返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。声明格式为：* 类型标识符 函数名(参数表)</li>
+<li>函数指针，其本质是一个指针变量，该指针指向这个函数。总结来说，函数指针就是指向函数的指针。声明格式：类型说明符 (*函数名) (参数)</li>
+</ul>
+</li>
+</ul>
+<pre><code class="c++">#include&lt;iostream&gt;
+
+typedef struct _Data{
     int a;
     int b;
-}Data;</p>
-<p>//指针函数
+}Data;
+
+//指针函数
 Data* f(int a,int b){
     Data * data = new Data;
     data-&gt;a = a;
     data-&gt;b = b;
     return data;
-}</p>
-<p>int main(int argc, char *argv[])
+}
+
+int main(int argc, char *argv[])
 {
     //调用指针函数
     Data * myData = f(4,5);
-    std::cout &lt;&lt; "f(4,5) = " &lt;&lt; myData-&gt;a &lt;&lt; myData-&gt;b &lt;&lt; std::endl;
+    std::cout &lt;&lt; &quot;f(4,5) = &quot; &lt;&lt; myData-&gt;a &lt;&lt; myData-&gt;b &lt;&lt; std::endl;
     delete myData;
     return 0;
 }
-```</p>
-</li>
-<li>
-<p>函数指针，其本质是一个指针变量，该指针指向这个函数。总结来说，函数指针就是指向函数的指针。声明格式：类型说明符 (*函数名) (参数)</p>
-<p>```c++</p>
-<h1 id="include">include <iostream><a class="headerlink" href="#include" title="Permanent link"></a></h1>
-<p>int add(int x,int y){
+</code></pre>
+
+<pre><code class="c++">#include &lt;iostream&gt;
+
+int add(int x,int y){
 return x+y;
 }
 int sub(int x,int y){
     return x-y;
 }
 //函数指针
-int (*fun)(int x,int y);</p>
-<p>int main(int argc, char <em>argv[])
+int (*fun)(int x,int y);
+
+int main(int argc, char *argv[])
 {
     //第一种写法
     fun = add;
-    std::cout &lt;&lt; "(</em>fun)(1,2) = " &lt;&lt; (<em>fun)(1,2) ;
+    std::cout &lt;&lt; &quot;(*fun)(1,2) = &quot; &lt;&lt; (*fun)(1,2) ;
     //第二种写法
-    fun = &sub;
-    std::cout &lt;&lt; "(</em>fun)(5,3) = " &lt;&lt; (*fun)(5,3)  &lt;&lt; fun(5,3)；
+    fun = &amp;sub;
+    std::cout &lt;&lt; &quot;(*fun)(5,3) = &quot; &lt;&lt; (*fun)(5,3)  &lt;&lt; fun(5,3)；
     return 0;
 }
-```</p>
-</li>
-</ul></div>
+</code></pre></div>
             </div>
         </div>
 

@@ -105,6 +105,11 @@
     
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#inline" class="nav-link">内联函数inline</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
         </ul>
     </div>
 </div></div>
@@ -116,59 +121,75 @@
  * @Author: colley
  * @Date: 2020-03-14 23:38:28
  * @LastEditors: colley
- * @LastEditTime: 2020-03-15 11:04:15
+ * @LastEditTime: 2020-03-15 18:46:04
  -->
 
-<p>## 内联函数inline</p>
+<h2 id="inline">内联函数inline<a class="headerlink" href="#inline" title="Permanent link"></a></h2>
 <ul>
-<li>使用inline修饰函数的声明或者实现，可以使其变成内联函数</li>
+<li>使用inline修饰函数的声明或者实现，可以使其变成内联函数<ul>
 <li>建议声明和实现都增加inline修饰</li>
-<li>特点</li>
+</ul>
+</li>
+<li>特点<ul>
 <li>编译器会将函数调用直接展开为函数体代码</li>
 <li>可以减少函数调用的开销(调用函数需要开辟栈空间，调用结束之后还需要回收栈空间)</li>
 <li>会增大代码体积</li>
-<li>注意</li>
-<li>尽量不要内联超过10行代码的函数</li>
-<li>有些函数即使声明为inline，也不一定会被编译器内联，比如递归函数
-    <code>c++
-    void run()
-    {
-        run()
-    }</code></li>
-<li>使用范围：代码体积不大，反复调用的。</li>
-<li><code>inline</code>和<code>#define</code>宏都可以减少开销但是存在区别<ul>
-<li><code>inline</code>多了语法检测和函数特性</li>
-<li>由于<code>#define</code>是直接替换可能不是想要的结果
- <code>C++
- #define sum(x) (x+x) //result: 24
- inline int sum(x) { return x + x; }//result:22
- int a = 10;
- sum(++a);</code>
-  ### 汇编实质</li>
 </ul>
 </li>
-<li>不加inline
-  <code>c++
-  int sum(int v1, int v2) {
-    return v1 + v2;
-  }</code>
-  <code>c++
-      39:   int c =sum(4, 6);
-  00007FF6AE181034 BA 06 00 00 00       mov         edx,6
-  00007FF6AE181039 B9 04 00 00 00       mov         ecx,4
-  00007FF6AE18103E E8 BD FF FF FF       call        sum (07FF6AE181000h)
-  00007FF6AE181043 89 44 24 28          mov         dword ptr [c],eax</code></li>
-<li>加inline
-  <code>c++
-  inline int sum(int v1, int v2) {
-    return v1 + v2;
-  }</code>
-  <code>c++
-      39:   int c =sum(4, 6);
-  00007FF7A46A1014 B8 04 00 00 00       mov         eax,4
-  00007FF7A46A1019 83 C0 06             add         eax,6
-  00007FF7A46A101C 89 44 24 28          mov         dword ptr [c],eax</code>
-  有inline修饰之后直接将调用的函数拿出来，不会去调用sum函数了</li>
+<li>注意<ul>
+<li>尽量不要内联超过10行代码的函数</li>
+<li>有些函数即使声明为inline，也不一定会被编译器内联，比如递归函数</li>
+<li>使用范围：代码体积不大，反复调用的。</li>
+<li><code>inline</code>和<code>#define</code>宏都可以减少开销但是存在区别</li>
+<li><code>inline</code>多了语法检测和函数特性</li>
+<li>由于<code>#define</code>是直接替换可能不是想要的结果</li>
+</ul>
+</li>
+</ul>
+<pre><code class="c++">void run()
+{
+    run()
+}
+</code></pre>
+
+<pre><code class="C++">#define sum(x) (x+x) //result: 24
+inline int sum(x) { return x + x; }//result:22
+int a = 10;
+sum(++a);
+</code></pre>
+
+<h3 id="_1">汇编实质<a class="headerlink" href="#_1" title="Permanent link"></a></h3>
+<ul>
+<li>不加inline</li>
+</ul>
+<pre><code class="c++">int sum(int v1, int v2) {
+  return v1 + v2;
+}
+</code></pre>
+
+<pre><code class="c++">    39:     int c =sum(4, 6);
+00007FF6AE181034 BA 06 00 00 00       mov         edx,6
+00007FF6AE181039 B9 04 00 00 00       mov         ecx,4
+00007FF6AE18103E E8 BD FF FF FF       call        sum (07FF6AE181000h)
+00007FF6AE181043 89 44 24 28          mov         dword ptr [c],eax
+</code></pre>
+
+<ul>
+<li>加inline</li>
+</ul>
+<pre><code class="c++">inline int sum(int v1, int v2) {
+  return v1 + v2;
+}
+</code></pre>
+
+<pre><code class="c++">    39:     int c =sum(4, 6);
+00007FF7A46A1014 B8 04 00 00 00       mov         eax,4
+00007FF7A46A1019 83 C0 06             add         eax,6
+00007FF7A46A101C 89 44 24 28          mov         dword ptr [c],eax
+</code></pre>
+
+<ul>
+<li>有inline修饰之后直接将调用的函数拿出来，不会去调用sum函数了</li>
 </ul></div>
             </div>
         </div>

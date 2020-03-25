@@ -126,77 +126,93 @@
  * @Author: colley
  * @Date: 2020-03-15 13:09:55
  * @LastEditors: colley
- * @LastEditTime: 2020-03-15 16:15:35
+ * @LastEditTime: 2020-03-15 18:42:28
  -->
 
 <h2 id="_1">引用<a class="headerlink" href="#_1" title="Permanent link"></a></h2>
 <ul>
 <li>在C语言中，使用指针（Pointer）可以间接获取、修改某个变量的值</li>
 <li>在C++中，使用引用（Reference）可以起到跟指针类似的功能</li>
-<li>注意:</li>
+<li>注意:<ul>
 <li>引用相当于是变量的别名（基本数据类型、枚举、结构体、类、指针、数组等，都可以有引用）</li>
 <li>对引用做计算，就是对引用所指向的变量做计算</li>
 <li>在定义的时候就必须初始化，一旦指向了某个变量，就不可以再改变，“从一而终”</li>
 <li>可以利用引用初始化另一个引用，相当于某个变量的多个别名</li>
 <li>不存在[引用的引用、指向引用的指针、引用数组]</li>
+</ul>
+</li>
 <li>引用存在的价值之一：比指针更安全、函数返回值可以被赋值</li>
 <li>引用的本质就是指针，只是编译器削弱了它的功能，所以引用就是弱化了的指针</li>
 <li>一个引用占用一个指针的大小</li>
 </ul>
 <h2 id="_2">汇编分析<a class="headerlink" href="#_2" title="Permanent link"></a></h2>
 <ul>
-<li>初始化引用变量从一而终
-  <code>c++
-  int heading1 = 20;
-  int heading2 = 9;
-  int &amp;refHeading = heading1;
-  refHeading = heading2; //只是进行赋值操作不是创建引用</code></li>
-<li>反复调用<code>swap(int&amp;,int&amp;)</code>函数好像不符合"从一而终"的概念是因为，每次调用都会创建新的栈空间，每一次调用都会重新创建新的引用
-  <code>c++
-  void swap(int &amp;v1, int &amp;v2) {
-    int tmp = v1;
-    v1 = v2;
-    v2 = tmp;
-  }</code></li>
-<li>引用是弱化的指针，占用内存大小和指针没有区别</li>
+<li>初始化引用变量从一而终</li>
+</ul>
+<pre><code class="c++">int heading1 = 20;
+int heading2 = 9;
+int &amp;refHeading = heading1;
+refHeading = heading2; //只是进行赋值操作不是创建引用
+</code></pre>
+
+<ul>
+<li>反复调用<code>swap(int&amp;,int&amp;)</code>函数好像不符合"从一而终"的概念是因为，每次调用都会创建新的栈空间，每一次调用都会重新创建新的引用</li>
+</ul>
+<pre><code class="c++">void swap(int &amp;v1, int &amp;v2) {
+int tmp = v1;
+v1 = v2;
+v2 = tmp;
+}
+</code></pre>
+
+<ul>
+<li>引用是弱化的指针，占用内存大小和指针没有区别<ul>
 <li>8086 (16bit)两字节</li>
 <li>x86 (32bit)四字节</li>
-<li>
-<p>x64 (64bit)八字节</p>
-<ul>
-<li>间接证明
-```c++
-struct Student {int &amp; age;}
-struct Student2 {int* age;}
-struct Student3 {int age;}</li>
+<li>x64 (64bit)八字节</li>
 </ul>
-<p>std::cout &lt;&lt; "sizieof(student): " &lt;&lt; sizeof(Student) &lt;&lt; std::endl;
-std::cout &lt;&lt; "sizieof(student2): " &lt;&lt; sizeof(Student2) &lt;&lt; std::endl;
-std::cout &lt;&lt; "sizieof(student3): " &lt;&lt; sizeof(Student3) &lt;&lt; std::endl;
-<code>- 错误的证明方式（原因：refAge使用等价age变量，所以后面所有的`sizeof()`相当于对`age`和对`age`的指针进行大小的判断）</code>c++
-int age = 19;
+</li>
+<li>间接证明</li>
+</ul>
+<pre><code class="c++">struct Student {int &amp; age;}
+struct Student2 {int* age;}
+struct Student3 {int age;}
+
+std::cout &lt;&lt; &quot;sizieof(student): &quot; &lt;&lt; sizeof(Student) &lt;&lt; std::endl;
+std::cout &lt;&lt; &quot;sizieof(student2): &quot; &lt;&lt; sizeof(Student2) &lt;&lt; std::endl;
+std::cout &lt;&lt; &quot;sizieof(student3): &quot; &lt;&lt; sizeof(Student3) &lt;&lt; std::endl;
+</code></pre>
+
+<ul>
+<li>错误的证明方式（原因：refAge使用等价age变量，所以后面所有的<code>sizeof()</code>相当于对<code>age</code>和对<code>age</code>的指针进行大小的判断）</li>
+</ul>
+<pre><code class="c++">int age = 19;
 int &amp;refAge = age;
 std::cout &lt;&lt; sizeof(refAge) &lt;&lt; std::endl;
 std::cout &lt;&lt; sizeof(&amp;refAge) &lt;&lt; std::endl;
-<code>- 直接证明方法（指针和引用汇编代码的实现一摸一样）</code>c++
-    39:     int a;
-    40:     int <em>p = &a;
+</code></pre>
+
+<ul>
+<li>直接证明方法（指针和引用汇编代码的实现一摸一样）</li>
+</ul>
+<pre><code class="c++">    39:     int a;
+    40:     int *p = &amp;a;
 00007FF68D961013 48 8D 44 24 08       lea         rax,[a]
 00007FF68D961018 48 89 04 24          mov         qword ptr [rsp],rax
-    41:     </em>p = 30;
+    41:     *p = 30;
 00007FF68D96101C 48 8B 04 24          mov         rax,qword ptr [rsp]
 00007FF68D961020 C7 00 1E 00 00 00    mov         dword ptr [rax],1Eh
-<code></code>c++
-    39:     int a;
+</code></pre>
+
+<pre><code class="c++">    39:     int a;
     40:     int &amp;p = a;
 00007FF622D11013 48 8D 44 24 08       lea         rax,[a]
 00007FF622D11018 48 89 04 24          mov         qword ptr [rsp],rax
     41:     p = 30;
 00007FF622D1101C 48 8B 04 24          mov         rax,qword ptr [rsp]
 00007FF622D11020 C7 00 1E 00 00 00    mov         dword ptr [rax],1Eh
-```</p>
-</li>
-</ul>
+</code></pre>
+
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 </div>
