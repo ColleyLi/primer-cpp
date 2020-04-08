@@ -4,7 +4,7 @@
  * @Author: colley
  * @Date: 2020-03-05 15:32:51
  * @LastEditors: colley
- * @LastEditTime: 2020-03-21 15:24:27
+ * @LastEditTime: 2020-04-04 00:34:01
  -->
 # C++学习笔记
 ---
@@ -21,6 +21,7 @@
 - [Extern "C"][extern_c]
 - [inline][inline]
 - [reference][reference]
+- [面向对象][class]
 
 ### References
 ---
@@ -34,6 +35,7 @@
 [extern_c]: externC/
 [inline]: inline/
 [reference]: reference/
+[class]: 面向对象/
 
 [cppman]: https://github.com/aitjcize/cppman
 [cpp_compile_support]: https://en.cppreference.com/w/cpp/compiler_support
